@@ -6,9 +6,9 @@ const EmployeeDetail = () => {
   return (
     <div className="flex h-screen">
       <SideBar />
-      <div className="flex flex-col flex-grow bg-gray-100 pl-12">
+      <div className="flex flex-col flex-grow bg-gray-100 ">
         <Topbar />
-        <div className="p-8 pl-16 bg-gray-100 h-full">
+        <div className="p-8  bg-gray-100 h-full">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <div className="flex justify-between items-center mb-6">
               <div>

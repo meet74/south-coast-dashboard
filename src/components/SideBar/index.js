@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   ProSidebar,
   Menu,
@@ -7,42 +7,37 @@ import {
   SidebarHeader,
   SidebarContent,
   SidebarFooter,
+  
 } from 'react-pro-sidebar';
 import { FaTachometerAlt, FaList } from 'react-icons/fa';
 import { BiStats } from 'react-icons/bi';
-
 import { FaRegCalendarDays, FaUserDoctor, FaMoneyBillTrendUp, FaUserNurse } from "react-icons/fa6";
-
 import { BsPower } from 'react-icons/bs';
-
-
-import { IoMdSettings,IoIosHelpCircle } from "react-icons/io";
-
+import { IoMdSettings, IoIosHelpCircle } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
-import './custom.scss'; // Ensure this file is correctly referenced
+
+import './custom.scss';
 import { dashboardScreenPath, dayScreenPath, employeeScreenPath, patientScreenPath, paymentScreenPath, reportScreenPath, settingsScreenPath } from '../../routes/pathNames';
 
 const SideBar = () => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
-
+  
   return (
-    <div className={`transition-all duration-300 ${collapsed ? 'w-[5%]' : 'w-[20%]'}`}>
+      <div className='100%'>
       <ProSidebar
-        style={{ position: 'fixed', height: '100vh' }}
+         collapsedWidth="4.5rem"
+        
+      
         collapsed={collapsed}
+        onToggle={() => setCollapsed(!collapsed)}
       >
         <SidebarHeader>
           <div className="flex flex-row items-center justify-between p-4">
             {!collapsed && (
               <div
                 onClick={() => navigate('/')}
-                className="flex flex-col items-start"
-                style={{
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  fontSize: 18,
-                }}
+                className="flex flex-col items-start cursor-pointer font-bold text-lg"
               >
                 <img src={require("../../assets/images/logo.png")} alt="Logo" className="h-8 mb-2" />
                 <span>South Coast</span>
@@ -51,7 +46,7 @@ const SideBar = () => {
             )}
             <FaList
               size={18}
-              style={{ cursor: 'pointer' }}
+              className="cursor-pointer"
               onClick={() => setCollapsed(!collapsed)}
             />
           </div>
@@ -69,8 +64,7 @@ const SideBar = () => {
             <MenuItem onClick={() => navigate(dayScreenPath)} icon={<FaRegCalendarDays size={'22px'} />}>
               <span className="text-base">Appointment</span>
             </MenuItem>
-
-           {!collapsed && <p className="menu-section px-4 pt-4 text-[#A9A9A9]">Other Menu</p>}
+            {!collapsed && <p className="menu-section px-4 pt-4 text-[#A9A9A9]">Other Menu</p>}
             <MenuItem onClick={() => navigate(employeeScreenPath)} icon={<FaUserDoctor size={'22px'} />}>
               <span className="text-base">Staff</span>
             </MenuItem>
@@ -80,16 +74,13 @@ const SideBar = () => {
             <MenuItem onClick={() => navigate(reportScreenPath)} icon={<BiStats size={'22px'} />}>
               <span className="text-base">Report</span>
             </MenuItem>
-           
-           {!collapsed && <p className="menu-section px-4 pt-4 text-[#A9A9A9]">Help & Settings</p>}
-           <MenuItem onClick={() => navigate(settingsScreenPath)} icon={<IoMdSettings size={'22px'} />}>
+            {!collapsed && <p className="menu-section px-4 pt-4 text-[#A9A9A9]">Help & Settings</p>}
+            <MenuItem onClick={() => navigate(settingsScreenPath)} icon={<IoMdSettings size={'22px'} />}>
               <span className="text-base">Settings</span>
             </MenuItem>
-            <MenuItem  icon={<IoIosHelpCircle size={'22px'} />}>
+            <MenuItem icon={<IoIosHelpCircle size={'22px'} />}>
               <span className="text-base">Help & Center</span>
             </MenuItem>
-         
-            
           </Menu>
         </SidebarContent>
 
@@ -100,7 +91,7 @@ const SideBar = () => {
           </div>
         </SidebarFooter>
       </ProSidebar>
-    </div>
+      </div>
   );
 };
 

@@ -1,10 +1,14 @@
-import logo from './logo.svg';
+import React,{useEffect} from 'react'
 import './App.css';
 import RouterNav from './routes';
+import { Provider } from 'react-redux';
+import store from './store';
 
 function App() {
   return (
-    <RouterNav/>
+   <Provider store={store}>
+     <RouterNav/>
+   </Provider>
   );
 }
 
