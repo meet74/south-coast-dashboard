@@ -12,3 +12,5 @@ export const paymentScreenPath = `${defaultPath}/home/payment`;
 export const settingsScreenPath = `${defaultPath}/home/settings`;
 export const reportScreenPath = `${defaultPath}/home/reports`;
 
+export const appointmentDetaiScreenPath = `${defaultPath}/home/appointments`;
+

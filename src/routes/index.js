@@ -7,12 +7,14 @@ import Dashboard from "../pages/home/Dashboard";
 import DayScreen from "../pages/home/Day";
 import PatientList from "../pages/home/PatientList";
 import {
+  appointmentDetaiScreenPath,
   dashboardScreenPath,
   dayScreenPath,
   employeeScreenPath,
   employeedetailScreenPath,
   homeScreenPath,
   loginPath,
+  patientDetaiScreenPath,
   patientScreenPath,
   paymentScreenPath,
   reportScreenPath,
@@ -23,6 +25,8 @@ import EmployeeDetail from "../pages/home/EmplyeeList/EmployeeDetail";
 import PaymentPage from "../pages/home/Payment";
 import SettingsPage from "../pages/home/Settings";
 import ReportPage from "../pages/home/Report";
+import PatientDetail from "../pages/home/Day/PatientDetail";
+import AppointmentDetail from "../pages/home/Day/PatientDetail";
 
 const RouterNav = () => {
   return (
@@ -33,6 +37,7 @@ const RouterNav = () => {
           <Route index element={<Navigate to={dashboardScreenPath} />} />
           <Route path={dashboardScreenPath} element={<Dashboard />} />
           <Route path={dayScreenPath} element={<DayScreen />} />
+          <Route path={`${appointmentDetaiScreenPath}/:id`} element={<AppointmentDetail />} />
           <Route path={patientScreenPath} element={<PatientList />} />
           <Route path={employeeScreenPath} element={<EmployeeList />} />
           <Route path={employeedetailScreenPath} element={<EmployeeDetail />} />

@@ -1,30 +1,48 @@
-import { ADD_APPOINTMENT } from "../actions/appointmentAction";
+import { ADD_APPOINTMENT, DELETE_APPOINTMENT, SET_APPOINTMENTS } from "../actions/appointmentAction";
 
 const initialState = {
   appointments: [],
 };
 
-export default (state = initialState, action) => {
+const appointmentReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_APPOINTMENT: {
       const newAppointment = {
-        appointmentDate: action.data.appointmentDate,
-        appointmentEmail: action.data.appointmentEmail,
-        appointmentID: action.data.appointmentID,
-        appointmentMessage: action.data.appointmentMessage,
-        appointmentName: action.data.appointmentName,
-        appointmentTime: action.data.appointmentTime,
-        appoiontmentPhoneNumber: action.data.appoiontmentPhoneNumber,
+        appointmentDate: action.payload.appointmentDate,
+        appointmentEmail: action.payload.appointmentEmail,
+        appointmentID: action.payload.appointmentID,
+        appointmentMessage: action.payload.appointmentMessage,
+        appointmentName: action.payload.appointmentName,
+        appointmentTime: action.payload.appointmentTime,
+        appointmentPhoneNumber: action.payload.appointmentPhoneNumber,
+        appointmentStatus: "Confirmed",
       };
 
-      const oldAppointments = [...state.appointments];
-      oldAppointments.push(newAppointment)
       return {
         ...state,
-        appointments: oldAppointments,
+        appointments: [...state.appointments, newAppointment],
       };
     }
+
+    case DELETE_APPOINTMENT: {
+      const updatedAppointments = state.appointments.filter(
+        (appointment) => appointment.appointmentID !== action.payload
+      );
+      
+      return {
+        ...state,
+        appointments: updatedAppointments,
+      };
+    }
+    case SET_APPOINTMENTS:
+      return {
+        ...state,
+        appointments: action.payload,
+      };
+
     default:
       return state;
   }
 };
+
+export default appointmentReducer;
