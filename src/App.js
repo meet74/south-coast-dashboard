@@ -1,24 +1,25 @@
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+import RouterNav from './routes';
+import { useDispatch } from 'react-redux';
+import { listenForAppointments } from './config/firebaseUtils';
+import { setAppointments } from './store/actions/appointmentAction';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = listenForAppointments((confirmedAppointments) => {
+      console.log("app", confirmedAppointments);
+      dispatch(setAppointments(confirmedAppointments));
+    });
+
+    // Clean up the listener on unmount
+    return () => unsubscribe();
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RouterNav />
   );
 }
 
