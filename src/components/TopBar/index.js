@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaBell } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { firestore } from "../../config/firebase";
 import { add_appointment } from '../../store/actions/appointmentAction';
 import { listenForPendingAppointments } from '../../config/firebaseUtils';
@@ -27,40 +27,45 @@ const Topbar = () => {
     setShowNotifications(!showNotifications);
   };
 
-  const handleApprove = async (data) => {
+  const updateAppointmentStatus = async (id, status) => {
     try {
       const appointmentRef = doc(firestore, "appointment", "appointment-data");
-      const updatedData = notifications.map(notification =>
-        notification.appointmentID === data.appointmentID
-          ? { ...notification, appointmentStatus: "Confirmed" }
-          : notification
-      );
+      const appointmentDoc = await getDoc(appointmentRef);
+      const appointmentData = appointmentDoc.data().appointmentData;
 
-      await updateDoc(appointmentRef, { appointmentData: updatedData });
-     
-      setNotifications(notifications.filter(notification => notification.appointmentID !== data.appointmentID));
-      toast.success("Appointment approved!");
-      setShowNotifications(false)
-    } catch (error) {
-      console.error("Error approving appointment:", error);
-    }
-  };
-
-  const handleDeny = async (id) => {
-    try {
-      const appointmentRef = doc(firestore, "appointment", "appointment-data");
-      const updatedData = notifications.map(notification =>
+      const updatedData = appointmentData.map(notification =>
         notification.appointmentID === id
-          ? { ...notification, appointmentStatus: "Denied" }
+          ? { ...notification, appointmentStatus: status }
           : notification
       );
 
       await updateDoc(appointmentRef, { appointmentData: updatedData });
       setNotifications(notifications.filter(notification => notification.appointmentID !== id));
-      toast.info("Appointment denied.");
-      setShowNotifications(false)
+      setShowNotifications(false);
+
+      return true;
     } catch (error) {
-      console.error("Error denying appointment:", error);
+      console.error(`Error ${status === "Confirmed" ? "approving" : "denying"} appointment:`, error);
+      return false;
+    }
+  };
+
+  const handleApprove = async (data) => {
+    const success = await updateAppointmentStatus(data.appointmentID, "Confirmed");
+    if (success) {
+     
+      toast.success("Appointment approved!");
+    } else {
+      toast.error("Error approving appointment.");
+    }
+  };
+
+  const handleDeny = async (id) => {
+    const success = await updateAppointmentStatus(id, "Denied");
+    if (success) {
+      toast.info("Appointment denied.");
+    } else {
+      toast.error("Error denying appointment.");
     }
   };
 
@@ -76,12 +81,12 @@ const Topbar = () => {
       </div>
       <div className="flex items-center space-x-4">
         <div className="relative">
-        {notifications.length > 0 && (
+          {notifications.length > 0 && (
             <span className="absolute top-0 right-0 inline-flex items-center justify-center h-4 w-4 text-xs font-bold leading-none text-red-100 bg-red-500 rounded-full">
               {notifications.length}
             </span>
           )}
-          <FaBell className="text-gray-500 cursor-pointer"  size = {26} onClick={handleNotificationClick} />
+          <FaBell className="text-gray-500 cursor-pointer"  size={26} onClick={handleNotificationClick} />
         
           {showNotifications && (
             <div className="absolute right-0 mt-2 w-96 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
@@ -129,7 +134,6 @@ const Topbar = () => {
         </div>
         <ToastContainer />
       </div>
-    
     </div>
   );
 };

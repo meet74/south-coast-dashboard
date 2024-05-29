@@ -23,10 +23,11 @@ const DayScreen = () => {
   };
 
   const convertData = (data) => {
+    var tempEvents = []
     if (data) {
-      const tempEvents = data.map((element) => {
+       data.map((element) => {
         const endDate = addOneHour(element.appointmentTime);
-        return {
+        tempEvents.push({
           id: element.appointmentID,
           title: element.appointmentName,
           start: new Date(
@@ -45,7 +46,8 @@ const DayScreen = () => {
           ),
           allDay: false,
           status: element.appointmentStatus,
-        };
+        })
+
       });
       setEventData(tempEvents);
     }
