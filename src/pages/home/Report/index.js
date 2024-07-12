@@ -1,152 +1,291 @@
-import React from 'react';
-import { Line,Bar } from 'react-chartjs-2';
+import React, { useState } from 'react';
+import Tabs from './Tabs';
+import SummaryReport from './ReportTabs/SummaryReport';
+import SalesByStaffReport from './ReportTabs/SalesByStaff';
+import TransactionsReport from './ReportTabs/TransactionReport';
+import DailyTransactionsReport from './ReportTabs/DailyTransactionReport';
+import CompensationReport from './ReportTabs/CompensationReport';
 import SideBar from '../../../components/SideBar';
-import TopNavBar from '../../../components/TopNavBar';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement
-} from 'chart.js';
+import Topbar from '../../../components/TopBar';
+import SalesReport from './ReportTabs/SalesReport';
+import ReportChart from './ReportTabs/ReportCharts';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement
-);
-
-const reports = [
-  { id: 1, title: 'Daily Summary', value: '150 appointments', icon: '📅' },
-  { id: 2, title: 'Monthly Revenue', value: '$12,000', icon: '💰' },
-  { id: 3, title: 'New Patients', value: '45', icon: '🩺' },
+const summaryData = [
+  {
+    location: 'KWIC Physiotherapy',
+    purchaseDate: 'July 11, 2024',
+    patient: 'Goran Djukanovic',
+    item: 'WSIB MSK POC Care and Outcome Report',
+    staffMember: 'Maharshi Trivedi',
+    payer: 'WSIB',
+    invoiceDate: 'July 11, 2024',
+    invoiceNumber: '7940-C01',
+    status: 'Paid',
+    subtotal: '$50.00',
+    taxes: '$0.00',
+    total: '$50.00',
+    collected: '$50.00',
+    balance: '$0.00',
+  },
+  {
+    location: 'KWIC Physiotherapy',
+    purchaseDate: 'July 11, 2024',
+    patient: 'Goran Djukanovic',
+    item: 'WSIB MSK POC Care and Outcome Report',
+    staffMember: 'Maharshi Trivedi',
+    payer: 'WSIB',
+    invoiceDate: 'July 11, 2024',
+    invoiceNumber: '7940-C01',
+    status: 'Paid',
+    subtotal: '$50.00',
+    taxes: '$0.00',
+    total: '$50.00',
+    collected: '$50.00',
+    balance: '$0.00',
+  },
+  {
+    location: 'KWIC Physiotherapy',
+    purchaseDate: 'July 11, 2024',
+    patient: 'Goran Djukanovic',
+    item: 'WSIB MSK POC Care and Outcome Report',
+    staffMember: 'Maharshi Trivedi',
+    payer: 'WSIB',
+    invoiceDate: 'July 11, 2024',
+    invoiceNumber: '7940-C01',
+    status: 'Paid',
+    subtotal: '$50.00',
+    taxes: '$0.00',
+    total: '$50.00',
+    collected: '$50.00',
+    balance: '$0.00',
+  },
+  {
+    location: 'KWIC Physiotherapy',
+    purchaseDate: 'July 11, 2024',
+    patient: 'Goran Djukanovic',
+    item: 'WSIB MSK POC Care and Outcome Report',
+    staffMember: 'Maharshi Trivedi',
+    payer: 'WSIB',
+    invoiceDate: 'July 11, 2024',
+    invoiceNumber: '7940-C01',
+    status: 'Paid',
+    subtotal: '$50.00',
+    taxes: '$0.00',
+    total: '$50.00',
+    collected: '$50.00',
+    balance: '$0.00',
+  },
+  // Add more entries as needed
 ];
 
-const transactions = [
-    { id: 1, date: '2024-05-01', amount: '$100', status: 'Completed' },
-    { id: 2, date: '2024-05-02', amount: '$80', status: 'Pending' },
-    { id: 3, date: '2024-05-03', amount: '$50', status: 'Completed' },
-    // Add more transaction data as needed
-  ];
-
-const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-  datasets: [
-    {
-      label: 'Monthly Revenue',
-      data: [5000, 10000, 15000, 20000, 25000, 30000],
-      borderColor: 'rgba(75, 192, 192, 1)',
-      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      fill: true,
-    },
-  ],
-};
-
-const barData = {
-    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-    datasets: [
+const salesByStaffData = [
+  {
+    name: 'Maharshi Trivedi',
+    invoices: [
       {
-        label: 'Daily Transactions',
-        data: [10, 20, 30, 40, 50],
-        backgroundColor: 'rgba(153, 102, 255, 0.6)',
-        borderColor: 'rgba(153, 102, 255, 1)',
-        borderWidth: 1,
+        location: 'KWIC Physiotherapy',
+        purchaseDate: 'Thursday July 11, 2024',
+        patient: 'Goran Djukanovic',
+        item: 'WSIB MSK POC Care and Outcome Report',
+        staffMember: 'Maharshi Trivedi',
+        payer: 'WSIB',
+        invoiceDate: 'Thursday July 11, 2024',
+        invoiceNumber: '#7940-C01',
+        status: 'Paid',
+        subtotal: '$50.00',
+        taxes: '$0.00',
+        total: '$50.00',
+        collected: '$50.00',
+        balance: '$0.00',
       },
+      // Add more invoices for Maharshi Trivedi
     ],
-  };
-
-  
-
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top',
-    },
-    title: {
-      display: true,
-      text: 'Monthly Revenue',
-    },
   },
-};
+  {
+    name: 'Mr. Aaditya Shastri',
+    invoices: [
+      {
+        location: 'KWIC Physiotherapy',
+        purchaseDate: 'Thursday July 11, 2024',
+        patient: 'Anne Kinney',
+        item: 'Home Visit Subsequent treatment',
+        staffMember: 'Mr. Aaditya Shastri',
+        payer: 'Patient',
+        invoiceDate: 'Thursday July 11, 2024',
+        invoiceNumber: '#7942-P01',
+        status: 'Unpaid',
+        subtotal: '$97.35',
+        taxes: '$12.65 HST',
+        total: '$110.00',
+        collected: '$0.00',
+        balance: '$110.00',
+      },
+      // Add more invoices for Mr. Aaditya Shastri
+    ],
+  },
+  // Add more staff members and their invoices
+];
+
+const transactionsData = [
+  {
+    date: 'July 11, 2024',
+    payer: 'Sunlife',
+    paymentMethod: 'Insurer Direct deposit',
+    referenceNumber: '12345',
+    appliedTo: 'Invoice #7939-C01',
+    amount: '$100.00',
+  },
+  {
+    date: 'July 11, 2024',
+    payer: 'Sunlife',
+    paymentMethod: 'Insurer Direct deposit',
+    referenceNumber: '12345',
+    appliedTo: 'Invoice #7939-C01',
+    amount: '$100.00',
+  },
+  {
+    date: 'July 11, 2024',
+    payer: 'Sunlife',
+    paymentMethod: 'Insurer Direct deposit',
+    referenceNumber: '12345',
+    appliedTo: 'Invoice #7939-C01',
+    amount: '$100.00',
+  },
+  {
+    date: 'July 11, 2024',
+    payer: 'Sunlife',
+    paymentMethod: 'Insurer Direct deposit',
+    referenceNumber: '12345',
+    appliedTo: 'Invoice #7939-C01',
+    amount: '$100.00',
+  },
+  // Add more entries as needed
+];
+
+const dailyTransactionsData = [
+  {
+    date: 'July 11, 2024',
+    numberOfTransactions: 15,
+    totalAmount: '$1500.00',
+  },
+  {
+    date: 'July 11, 2024',
+    numberOfTransactions: 15,
+    totalAmount: '$1500.00',
+  },
+  {
+    date: 'July 11, 2024',
+    numberOfTransactions: 15,
+    totalAmount: '$1500.00',
+  },
+  {
+    date: 'July 11, 2024',
+    numberOfTransactions: 15,
+    totalAmount: '$1500.00',
+  },
+  // Add more entries as needed
+];
+
+const compensationData = [
+  {
+    staffMember: 'Maharshi Trivedi',
+    totalCompensation: '$1000.00',
+    bonus: '$200.00',
+    total: '$1200.00',
+  },
+  {
+    staffMember: 'Maharshi Trivedi',
+    totalCompensation: '$1000.00',
+    bonus: '$200.00',
+    total: '$1200.00',
+  },
+  {
+    staffMember: 'Maharshi Trivedi',
+    totalCompensation: '$1000.00',
+    bonus: '$200.00',
+    total: '$1200.00',
+  },
+  {
+    staffMember: 'Maharshi Trivedi',
+    totalCompensation: '$1000.00',
+    bonus: '$200.00',
+    total: '$1200.00',
+  },
+  // Add more entries as needed
+];
+
+const salesData = [
+  {
+    location: 'KWIC Physiotherapy',
+    purchaseDate: 'Thursday July 11, 2024',
+    patient: 'Goran Djukanovic',
+    item: 'WSIB MSK POC Care and Outcome Report',
+    staffMember: 'Maharshi Trivedi',
+    payer: 'WSIB',
+    invoiceDate: 'Thursday July 11, 2024',
+    invoiceNumber: '#7940-C01',
+    status: 'Paid',
+    subtotal: '$50.00',
+    taxes: '$0.00',
+    total: '$50.00',
+    collected: '$50.00',
+    balance: '$0.00',
+  },
+  {
+    location: 'KWIC Physiotherapy',
+    purchaseDate: 'Thursday July 11, 2024',
+    patient: 'Sierra Hansen',
+    item: 'MIG Block2 (5-8weeks)',
+    staffMember: 'Maharshi Trivedi',
+    payer: 'Wawanesa Insurance',
+    invoiceDate: 'Thursday July 11, 2024',
+    invoiceNumber: '#7941-C01',
+    status: 'No Charge',
+    subtotal: '$0.00',
+    taxes: '$0.00',
+    total: '$0.00',
+    collected: '$0.00',
+    balance: '$0.00',
+  },
+  // Add more sales data as needed
+];
+
 
 const ReportPage = () => {
+  const [activeTab, setActiveTab] = useState('Reports');
+
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case 'Reports':
+        return <ReportChart />;
+      case 'Summary':
+        return <SummaryReport data={summaryData}/>;
+      case 'Sales':
+        return <SalesReport data={salesData}/>;
+      case 'Sales by Staff':
+        return <SalesByStaffReport data={salesByStaffData}/>;
+      case 'Transactions':
+        return <TransactionsReport data={transactionsData}/>;
+      case 'Daily Transactions':
+        return <DailyTransactionsReport data={dailyTransactionsData}/>;
+      case 'Compensation':
+        return <CompensationReport data={compensationData}/>;
+      default:
+        return <SummaryReport data={summaryData}/>;
+    }
+  };
+
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100 flex">
       <SideBar />
-      <div className="flex flex-col flex-grow">
-        <TopNavBar />
-        <div className="p-8">
-          <div className="bg-white shadow-md rounded-lg mb-8">
-            <div className="p-6 border-b">
-              <h1 className="text-2xl font-semibold text-gray-800">Reports</h1>
-            </div>
-            <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {reports.map((report) => (
-                <div key={report.id} className="bg-white shadow p-4 rounded-lg flex items-center">
-                  <span className="text-4xl">{report.icon}</span>
-                  <div className="ml-4">
-                    <h2 className="text-lg font-bold">{report.title}</h2>
-                    <p className="text-gray-600">{report.value}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="bg-white shadow-md rounded-lg mb-8">
-            <div className="p-6 border-b">
-              <h2 className="text-xl font-semibold text-gray-700">Transaction Details</h2>
-            </div>
-            <div className="p-6">
-              <table className="w-full text-left table-auto">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="px-4 py-2">ID</th>
-                    <th className="px-4 py-2">Date</th>
-                    <th className="px-4 py-2">Amount</th>
-                    <th className="px-4 py-2">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                {transactions.map((transaction) => (
-                    <tr key={transaction.id} className="border-b last:border-none hover:bg-gray-50 transition">
-                      <td className="px-4 py-2">{transaction.id}</td>
-                      <td className="px-4 py-2">{transaction.date}</td>
-                      <td className="px-4 py-2">{transaction.amount}</td>
-                      <td className="px-4 py-2">{transaction.status}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          
-          <div className="bg-white shadow-md rounded-lg">
-            <div className="p-6 border-b">
-              <h2 className="text-xl font-semibold text-gray-700">Monthly Overview</h2>
-            </div>
-            <div className="p-6">
-              <div className="flex flex-col md:flex-row md:space-x-6">
-                <div className="flex-1">
-                  <Line data={data} options={options} />
-                </div>
-                <div className="flex-1">
-                <Bar data={barData} options={options} />
-                </div>
-              </div>
-            </div>
-          </div>
-          
+      <div className="flex-grow">
+        <Topbar />
+        <div className="p-6">
+          <Tabs
+            tabs={['Reports','Summary','Sales', 'Sales by Staff', 'Transactions', 'Daily Transactions', 'Compensation']}
+            onSelect={setActiveTab}
+          />
+          {renderActiveTab()}
         </div>
       </div>
     </div>

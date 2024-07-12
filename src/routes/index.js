@@ -7,6 +7,7 @@ import Dashboard from "../pages/home/Dashboard";
 import DayScreen from "../pages/home/Day";
 import PatientList from "../pages/home/PatientList";
 import {
+  addAppointmentPath,
   appointmentDetaiScreenPath,
   dashboardScreenPath,
   dayScreenPath,
@@ -19,6 +20,7 @@ import {
   paymentScreenPath,
   reportScreenPath,
   settingsScreenPath,
+  wsibform,
 } from "./pathNames";
 import EmployeeList from "../pages/home/EmplyeeList";
 import EmployeeDetail from "../pages/home/EmplyeeList/EmployeeDetail";
@@ -27,6 +29,8 @@ import SettingsPage from "../pages/home/Settings";
 import ReportPage from "../pages/home/Report";
 import PatientDetail from "../pages/home/Day/PatientDetail";
 import AppointmentDetail from "../pages/home/Day/PatientDetail";
+import AddAppointment from "../pages/home/Day/AddAppointment";
+import WSIBFormPage from "../pages/home/Day/AddWSIB";
 
 const RouterNav = () => {
   return (
@@ -42,6 +46,8 @@ const RouterNav = () => {
           <Route path={employeeScreenPath} element={<EmployeeList />} />
           <Route path={employeedetailScreenPath} element={<EmployeeDetail />} />
           <Route path={reportScreenPath} element={<ReportPage />} />
+          <Route path={wsibform} element={<WSIBFormPage />} />
+          <Route path={addAppointmentPath} element={<AddAppointment />} />
           <Route path={paymentScreenPath} element={<PaymentPage />} />
           <Route path={settingsScreenPath} element={<SettingsPage />} />
         </Route>

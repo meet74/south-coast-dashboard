@@ -11,6 +11,7 @@ export const employeedetailScreenPath = `${defaultPath}/home/employee/detail`;
 export const paymentScreenPath = `${defaultPath}/home/payment`;
 export const settingsScreenPath = `${defaultPath}/home/settings`;
 export const reportScreenPath = `${defaultPath}/home/reports`;
-
+export const addAppointmentPath = `${defaultPath}/home/addappointment`
 export const appointmentDetaiScreenPath = `${defaultPath}/home/appointments`;
+export const wsibform = `${defaultPath}/home/wsib`
 

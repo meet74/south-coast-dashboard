@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import SideBar from "../../../components/SideBar";
 import Topbar from "../../../components/TopBar";
-import { appointmentDetaiScreenPath } from "../../../routes/pathNames";
+import { addAppointmentPath, appointmentDetaiScreenPath } from "../../../routes/pathNames";
 
 const localizer = momentLocalizer(moment);
 
@@ -23,38 +23,34 @@ const DayScreen = () => {
   };
 
   const convertData = (data) => {
-    var tempEvents = []
-    if (data) {
-       data.map((element) => {
-        const endDate = addOneHour(element.appointmentTime);
-        tempEvents.push({
-          id: element.appointmentID,
-          title: element.appointmentName,
-          start: new Date(
-            element.appointmentDate.split("-")[0],
-            element.appointmentDate.split("-")[1] - 1,
-            element.appointmentDate.split("-")[2],
-            element.appointmentTime.split(":")[0],
-            element.appointmentTime.split(":")[1]
-          ),
-          end: new Date(
-            element.appointmentDate.split("-")[0],
-            element.appointmentDate.split("-")[1] - 1,
-            element.appointmentDate.split("-")[2],
-            endDate.split(":")[0],
-            endDate.split(":")[1]
-          ),
-          allDay: false,
-          status: element.appointmentStatus,
-        })
-
-      });
-      setEventData(tempEvents);
-    }
+    const tempEvents = data.map((element) => {
+      const endDate = addOneHour(element.appointmentTime);
+      return {
+        id: element.appointmentID,
+        title: element.appointmentName,
+        start: new Date(
+          element.appointmentDate.split("-")[0],
+          element.appointmentDate.split("-")[1] - 1,
+          element.appointmentDate.split("-")[2],
+          element.appointmentTime.split(":")[0],
+          element.appointmentTime.split(":")[1]
+        ),
+        end: new Date(
+          element.appointmentDate.split("-")[0],
+          element.appointmentDate.split("-")[1] - 1,
+          element.appointmentDate.split("-")[2],
+          endDate.split(":")[0],
+          endDate.split(":")[1]
+        ),
+        allDay: false,
+        status: element.appointmentStatus,
+      };
+    });
+    setEventData(tempEvents);
   };
 
   useEffect(() => {
-    if (appointmentData) {
+    if (appointmentData && appointmentData.appointments) {
       convertData(appointmentData.appointments);
     }
   }, [appointmentData.appointments]);
@@ -82,7 +78,7 @@ const DayScreen = () => {
         <div className="p-10">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-3xl font-bold">Appointments</h1>
-            <button className="bg-[#043840] text-white py-2 px-4 rounded">
+            <button onClick={() => navigate(addAppointmentPath)} className="bg-[#043840] text-white py-2 px-4 rounded">
               + New Appointment
             </button>
           </div>

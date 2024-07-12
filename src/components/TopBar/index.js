@@ -27,6 +27,14 @@ const Topbar = () => {
     setShowNotifications(!showNotifications);
   };
 
+  const formatTimestamp = (timestamp) => {
+    if (timestamp && timestamp.seconds) {
+      const date = new Date(timestamp.seconds * 1000);
+      return date.toLocaleString();
+    }
+    return timestamp;
+  };
+
   const updateAppointmentStatus = async (id, status) => {
     try {
       const appointmentRef = doc(firestore, "appointment", "appointment-data");
@@ -86,7 +94,7 @@ const Topbar = () => {
               {notifications.length}
             </span>
           )}
-          <FaBell className="text-gray-500 cursor-pointer"  size={26} onClick={handleNotificationClick} />
+          <FaBell className="text-gray-500 cursor-pointer" size={26} onClick={handleNotificationClick} />
         
           {showNotifications && (
             <div className="absolute right-0 mt-2 w-96 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
@@ -100,7 +108,7 @@ const Topbar = () => {
                       <div>
                         <p className="font-semibold">{notification.appointmentName}</p>
                         <p className="text-gray-600 text-sm">
-                          {notification.appointmentDate} at {notification.appointmentTime}
+                          {formatTimestamp(notification.appointmentDate)} at {notification.appointmentTime}
                         </p>
                       </div>
                       <div className="flex space-x-2">
